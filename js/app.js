@@ -127,21 +127,14 @@ function speakCuteCorrect(){
   speakFeedback(line);
 }
 
-/*function speakCore(text){
+function speakCore(text, onEnd){
 
-  if(!text || !audioOn) return;
-
-  const synth = window.speechSynthesis;
-
-  // 🔥 Chrome: voices 아직 로드 안됐으면 대기
-  let voices = synth.getVoices();
-
-  if(!voices.length){
-    synth.onvoiceschanged = () => {
-      speakCore(text);
-    };
+  if(!text || !audioOn) {
+    if(onEnd) onEnd();
     return;
   }
+
+  const synth = window.speechSynthesis;
 
   if(synth.speaking){
     synth.cancel();
@@ -153,44 +146,11 @@ function speakCuteCorrect(){
   u.pitch = 1.5;
   u.volume = 1;
 
-  // 한국어 음성 있으면 선택
-  const koVoice = voices.find(v => 
-    v.lang && v.lang.toLowerCase().includes("ko")
-  );
-
-  if(koVoice){
-    u.voice = koVoice;
+  if(onEnd){
+    u.onend = onEnd;
   }
 
-  // cancel 직후 speak 안정화
-  setTimeout(()=>{
-    synth.speak(u);
-  }, 60);
-} */
-
-  function speakCore(text){
-
-  if(!text || !audioOn) return;
-
-  const synth = window.speechSynthesis;
-
-  const speakNow = () => {
-
-    if(synth.speaking){
-      synth.cancel();
-    }
-
-    const u = new SpeechSynthesisUtterance(text);
-    u.lang = "ko-KR";
-    u.rate = 1.15;
-    u.pitch = 1.5;
-    u.volume = 1;
-
-    synth.speak(u);
-  };
-
-  // 🔥 Chrome 안정화: 바로 실행
-  speakNow();
+  synth.speak(u);
 }
 
 function speakLearning(text){
@@ -566,7 +526,10 @@ function generateReverseChoices(correctChar){
       if(opt.name === correctChar.name){
 
         handleCorrect({ scoreAdd: 15 });
-        speakFeedback("정답!");
+        speakFeedback("정답!", () => {
+          state.current = pickRandom();
+          runReverse(state.current);
+        });
 
         setTimeout(()=>{
           state.current = pickRandom();
