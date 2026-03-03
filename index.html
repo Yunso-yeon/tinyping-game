@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>티니핑 한글 놀이 (개인 학습용)</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="assets/icon-192.png">
+  <meta name="theme-color" content="#FF8FC7">
+</head>
+<body>
+  <!-- bubbles -->
+
+
+  <div class="wrap">
+    <div class="card">
+      <div class="topbar">
+        <div class="brand">
+          <div class="title">티니핑 한글 놀이</div>
+          <div class="sub">개인 학습용 · 탭하면 소리 ON</div>
+        </div>
+
+        <div class="controls">
+          <button class="pill" id="soundBtn" aria-label="sound toggle">
+            <span id="soundIcon">🔇</span>
+            <span id="soundText">소리 켜기</span>
+          </button>
+          <button class="pill" id="shuffleBtn" aria-label="shuffle">
+            🔄 바꾸기
+          </button>
+        </div>
+      </div>
+
+      <!-- START SCREEN -->
+      <div id="startScreen" class="content screen active">
+
+        <div class="hero-area">
+          <img id="charImg" alt="캐릭터">
+          <div id="charName"></div>
+        </div>
+
+        <div class="mode-buttons">
+          <button data-stage="1">🎨 그림 보기</button>
+          <button data-stage="2">🧩 이름 고르기</button>
+          <button data-stage="3">🔄 그림 맞추기</button>
+          <button data-stage="4">✋ 글자 맞추기</button>
+          <button data-stage="5">✏️ 직접 써보기</button>
+        </div>
+
+        <button id="startBtn">시작하기</button>
+
+      </div>
+
+      <!-- GAME SCREEN (아주 간단 버전: 이름 맞히기 1문제씩) -->
+      <div id="gameScreen" class="content screen">
+        <div class="gameBox">
+
+          <!-- Stage 1 -->
+          <div id="exposureArea" class="stage-area learning-area">
+            <img id="exposureImg" alt="학습 이미지">
+            <div id="exposureName" class="big-name"></div>
+
+            <div class="exposure-controls">
+              <button id="speakBtn">🔊 다시 듣기</button>
+              <button id="nextBtn">➡ 다음</button>
+            </div>
+          </div>  
+
+          <!-- Stage 2 -->
+          <div id="recognitionArea" class="stage-area">
+
+            <div style="font-size:18px;font-weight:900;">
+              이 티니핑은 누구일까?
+            </div>
+
+            <div class="hero">
+              <img id="quizImg" alt="퀴즈 캐릭터">
+            </div>
+
+            <div class="choices" id="choices"></div>
+
+          </div>
+
+          <!-- Stage 3 -->
+          <div id="reverseArea" class="stage-area">
+
+            <div class="reverse-question">
+              이 이름에 맞는 티니핑은?
+            </div>
+
+            <div id="reverseName" class="big-name"></div>
+
+            <div class="reverse-controls">
+              <button id="reverseSpeakBtn">🔊 다시 듣기</button>
+              <button id="reverseReplayBtn">🔁 다시 보기</button>
+            </div>
+
+             <!-- 🔥 이 줄이 반드시 있어야 함 -->
+              <div id="reverseChoices" class="reverse-choices"></div>
+          </div>
+
+          <!-- Stage 4 -->
+          <div id="dragArea" class="stage-area"></div>
+
+          <!-- Stage 5 -->
+          <div id="writeArea" class="stage-area">
+            <div class="write-title">✏️ 따라 써보기</div>
+
+            <div class="write-prompt">
+              <div class="write-label">이 글자를 따라 써보자!</div>
+              <div id="writeTarget" class="write-target">하츄핑</div>
+            </div>
+
+            <div class="write-toolbar">
+              <button class="pill" id="writeSpeakBtn">🔊 읽어줘</button>
+              <button class="pill" id="writeHintBtn">👻 힌트 끄기</button>
+              <button class="pill" id="writeClearBtn">🧽 지우기</button>
+              <button class="pill" id="writeNextBtn">➡ 다음</button>
+            </div>
+
+            <div class="canvas-wrap">
+              <canvas id="writeCanvas"></canvas>
+            </div>
+
+            <div class="write-tip">손가락/펜으로 화면에 써보자 😊</div>
+          </div>
+
+          <div class="status-bar" id="statusBar">
+
+            <div class="score-level-row">
+              <div class="score-board">
+                ⭐ <span id="scoreValue">0</span>
+              </div>
+
+              <div class="level-board">
+                🎮 Lv <span id="levelValue">1</span>
+              </div>
+            </div>
+
+            <div class="progress-wrap">
+              <div class="progress-bar" id="progressBar"></div>
+            </div>
+
+          </div>
+      
+          <div style="height:10px"></div>
+            <button class="pill" id="backBtn">⬅️ 처음으로</button>
+          </div>
+        </div>
+    </div>
+  </div>
+  <div id="levelUpPopup" class="level-up">LEVEL UP! 🚀</div>
+  <div class="toast" id="toast"></div>
+  <div id="confettiContainer"></div>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

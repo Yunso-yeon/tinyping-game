@@ -1,0 +1,21 @@
+{
+  "name": "티니핑 한글 놀이",
+  "short_name": "티니핑놀이",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#FFE7F2",
+  "theme_color": "#FF8FC7",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
