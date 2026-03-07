@@ -826,15 +826,17 @@ function moveDraw(e){
 
   const dist = Math.sqrt(dx*dx + dy*dy);
 
-  if(dist > 0.5){
+  if(dist < 0.3) return;
 
-    writeCtx.beginPath();
-    writeCtx.moveTo(lastPt.x, lastPt.y);
-    writeCtx.lineTo(pt.x, pt.y);
-    writeCtx.stroke();
+  const pressure = e.pressure || 0.5;
+  writeCtx.lineWidth = 6 + pressure * 8;
 
-    lastPt = pt;
-  }
+  writeCtx.beginPath();
+  writeCtx.moveTo(lastPt.x, lastPt.y);
+  writeCtx.lineTo(pt.x, pt.y);
+  writeCtx.stroke();
+
+  lastPt = pt;
 }
 
 function endDraw(e){
@@ -957,6 +959,7 @@ document.querySelectorAll(".mode-buttons button")
 // 캔버스 그리기 이벤트
 writeCanvas.addEventListener("pointerdown", startDraw);
 writeCanvas.addEventListener("pointermove", moveDraw);
+writeCanvas.addEventListener("pointerrawupdate", moveDraw); // ⭐ 추가
 writeCanvas.addEventListener("pointerup", endDraw);
 writeCanvas.addEventListener("pointercancel", endDraw);
 writeCanvas.addEventListener("pointerleave", endDraw);
