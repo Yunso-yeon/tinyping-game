@@ -800,27 +800,53 @@ function getCanvasPoint(e){
   return { x, y };
 }
 
-function startDraw(e){ 
+function startDraw(e){
+
   if(!writeCtx) return;
+
+  // 마우스 입력은 무시 (PC 드래그 방지)
+  if(e.pointerType === "mouse") return;
+
+  // 손바닥 터치 무시
+  if(e.pointerType === "touch" && e.width > 40) return;
+
   isDrawing = true;
+
   lastPt = getCanvasPoint(e);
+
+  writeCanvas.setPointerCapture(e.pointerId);
 }
 
 function moveDraw(e){
+
   if(!isDrawing || !writeCtx) return;
+
   e.preventDefault();
 
   const pt = getCanvasPoint(e);
+
+  // 압력 감지 (펜슬/S펜)
+  const pressure = e.pressure || 0.5;
+
+  // 선 두께 동적 조절
+  writeCtx.lineWidth = 6 + pressure * 8;
+
   writeCtx.beginPath();
   writeCtx.moveTo(lastPt.x, lastPt.y);
   writeCtx.lineTo(pt.x, pt.y);
   writeCtx.stroke();
+
   lastPt = pt;
 }
 
-function endDraw(){
+function endDraw(e){
+
   isDrawing = false;
   lastPt = null;
+
+  if(e && writeCanvas.hasPointerCapture(e.pointerId)){
+    writeCanvas.releasePointerCapture(e.pointerId);
+  }
 }
 
 function runWrite(q){
@@ -931,8 +957,8 @@ document.querySelectorAll(".mode-buttons button")
 
 
 // 캔버스 그리기 이벤트
-writeCanvas.addEventListener("pointerdown", (e)=>{ startDraw(e); });
-writeCanvas.addEventListener("pointermove", (e)=>{ moveDraw(e); });
+writeCanvas.addEventListener("pointerdown", startDraw);
+writeCanvas.addEventListener("pointermove", moveDraw);
 writeCanvas.addEventListener("pointerup", endDraw);
 writeCanvas.addEventListener("pointercancel", endDraw);
 writeCanvas.addEventListener("pointerleave", endDraw);
