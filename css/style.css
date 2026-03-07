@@ -725,12 +725,6 @@ canvas {
   border-radius:20px;
 }
 
-/* 캔버스 내부 */
-#writeCanvas{
-  width:100%;
-  height:100%;
-  display:block;
-}
 
 /* 툴바 */
 .write-toolbar{

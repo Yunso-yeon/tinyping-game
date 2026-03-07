@@ -804,8 +804,9 @@ function startDraw(e){
 
   if(!writeCtx) return;
 
-  // 마우스 입력 무시
   if(e.pointerType === "mouse") return;
+
+  writeCanvas.setPointerCapture(e.pointerId); // ⭐ 추가
 
   isDrawing = true;
 
@@ -820,23 +821,27 @@ function moveDraw(e){
 
   const pt = getCanvasPoint(e);
 
-  // 압력 감지 (펜슬/S펜)
-  const pressure = e.pressure || 0.5;
+  const dx = pt.x - lastPt.x;
+  const dy = pt.y - lastPt.y;
 
-  // 선 두께 동적 조절
-  writeCtx.lineWidth = 6 + pressure * 8;
+  const dist = Math.sqrt(dx*dx + dy*dy);
 
-  writeCtx.beginPath();
-  writeCtx.moveTo(lastPt.x, lastPt.y);
-  writeCtx.lineTo(pt.x, pt.y);
-  writeCtx.stroke();
-  writeCtx.lineCap = "round";
-  writeCtx.lineJoin = "round";
+  if(dist > 0.5){
 
-  lastPt = pt;
+    writeCtx.beginPath();
+    writeCtx.moveTo(lastPt.x, lastPt.y);
+    writeCtx.lineTo(pt.x, pt.y);
+    writeCtx.stroke();
+
+    lastPt = pt;
+  }
 }
 
-function endDraw(){
+function endDraw(e){
+
+  if(e && writeCanvas.hasPointerCapture(e.pointerId)){
+    writeCanvas.releasePointerCapture(e.pointerId);
+  }
 
   isDrawing = false;
   lastPt = null;
