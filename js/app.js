@@ -804,17 +804,12 @@ function startDraw(e){
 
   if(!writeCtx) return;
 
-  // 마우스 입력은 무시 (PC 드래그 방지)
+  // 마우스 입력 무시
   if(e.pointerType === "mouse") return;
-
-  // 손바닥 터치 무시
-  if(e.pointerType === "touch" && e.width > 40) return;
 
   isDrawing = true;
 
   lastPt = getCanvasPoint(e);
-
-  writeCanvas.setPointerCapture(e.pointerId);
 }
 
 function moveDraw(e){
@@ -835,18 +830,16 @@ function moveDraw(e){
   writeCtx.moveTo(lastPt.x, lastPt.y);
   writeCtx.lineTo(pt.x, pt.y);
   writeCtx.stroke();
+  writeCtx.lineCap = "round";
+  writeCtx.lineJoin = "round";
 
   lastPt = pt;
 }
 
-function endDraw(e){
+function endDraw(){
 
   isDrawing = false;
   lastPt = null;
-
-  if(e && writeCanvas.hasPointerCapture(e.pointerId)){
-    writeCanvas.releasePointerCapture(e.pointerId);
-  }
 }
 
 function runWrite(q){
